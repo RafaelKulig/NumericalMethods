@@ -67,9 +67,10 @@ NumericalMethods/
 
 ## Future Improvements
 Planned numerical methods to implement in the project:
-* Newton Method
-* Newton-Raphson Method
-* Secant Method
+* Brent method
+* Halley method
+* User input on desired error calculation
+* Linear system algorithms 
 
 ## License
 
