@@ -7,6 +7,7 @@ A Python project for implementing and experimenting with numerical methods.
 Currently, the project includes the following numerical method:
 
 - **Bisection Method**: Implements the bisection algorithm for finding roots of continuous functions.
+- **Fixed point**: Implements the fixed point algorithm for finding roots of continuous functions.
 
 ## Requirements
 - Python 3.x
@@ -24,15 +25,26 @@ Currently, the project includes the following numerical method:
 
 ## Example Usage
 
-The [`Solutions`](Methods/Solutions.py#L4) class provides a `bisection` method for finding roots of equations:
+The [`Solutions`](Methods/Solutions.py#L4) class provides the `bisection` and `fixed point` method for finding roots of equations:
 
 ```python
 from Methods import Solutions
-
+from math import cos
 def main():
-    root, iterations=Solutions().bisection(lambda x: x**2 - 4, 0, 5, 0.01, 100)
+    root, iterations=Solutions().bisection(lambda x: x**2 - 4, 0, 3, error=1e-6, max_iter=100)
     print(f"Root: {root}, Iterations: {iterations}")
 
+    # root, iterations=Solutions().bisection(lambda x: x**2 + 1, -1, 1, error=1e-6, max_iter=100)
+    # print(f"Root: {root}, Iterations: {iterations}")
+
+    root, iterations=Solutions().fixed_point(lambda x: cos(x),x0=1.0, error=1e-6, max_iter=100)
+    print(f"Root: {root}, Iterations: {iterations}")
+
+    # root, iterations=Solutions().fixed_point(lambda x: 2 * x,x0=1.0, error=1e-6, max_iter=50)
+    # print(f"Root: {root}, Iterations: {iterations}")
+
+    root, iterations=Solutions().bisection(lambda x: x - 1, 0, 2, error=1e-10, max_iter=100)
+    print(f"Root: {root}, Iterations: {iterations}")
 
 if __name__=="__main__":
     main()
@@ -55,7 +67,6 @@ NumericalMethods/
 
 ## Future Improvements
 Planned numerical methods to implement in the project:
-* Fixed Point Method
 * Newton Method
 * Newton-Raphson Method
 * Secant Method

@@ -26,7 +26,7 @@ class Solutions(object):
         Raises:
             ValueError: If the method fails to converge within the maximum number of iterations.
         """
-        if error or max_iter <= 0:
+        if (error or max_iter) <= 0:
             raise ValueError("Error and max_iter must be positive values.")
         if f(a) * f(b) >= 0:
             raise ValueError("f(a) and f(b) must have different signs.")
@@ -58,7 +58,7 @@ class Solutions(object):
         Raises:
             ValueError: If the method fails to converge within the maximum number of iterations.
         """
-        if error or max_iter <= 0:
+        if (error or max_iter) <= 0:
             raise ValueError("Error and max_iter must be positive values.")
         i = 0
         x_n = x0
