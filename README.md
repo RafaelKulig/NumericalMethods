@@ -21,14 +21,7 @@ Currently, the project includes the following numerical method:
     source venv/bin/activate   # Linux/macOS
     venv\Scripts\activate      # Windows
     ```
-3. Run the main script
-    ```bash
-    python main.py
-    ```
-### Example Output
-```text
-Root: 2.0000000000000004, Iterations: 7
-```
+
 ## Example Usage
 
 The [`Solutions`](Methods/Solutions.py#L4) class provides a `bisection` method for finding roots of equations:
