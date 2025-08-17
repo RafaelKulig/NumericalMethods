@@ -2,11 +2,9 @@ from typing import Callable
 
 
 class Solutions:
-    def __init__(self):
-        pass
 
+    @staticmethod
     def bisection(
-        self,
         f: Callable[[float], float],
         a: float,
         b: float,
@@ -43,8 +41,12 @@ class Solutions:
             i += 1
         raise ValueError("Method failed after maximum iterations")
 
+    @staticmethod
     def fixed_point(
-        self, g: Callable[[float], float], x0: float, error: float, max_iter: int
+        g: Callable[[float], float], 
+        x0: float, 
+        error: float, 
+        max_iter: int
     ):
         """
         Fixed Point Iteration method to find a fixed point of the function g.
@@ -69,9 +71,14 @@ class Solutions:
             x_n = x_n1
             i += 1
         raise ValueError("Method failed after maximum iterations")
-    
+
+    @staticmethod
     def newton_raphson(
-        self, f: Callable[[float], float], df: Callable[[float], float], x0: float, error: float, max_iter: int
+        f: Callable[[float], float],
+        df: Callable[[float], float],
+        x0: float,
+        error: float,
+        max_iter: int,
     ):
         """
         Newton-Raphson method to find a root of the function f.
@@ -100,9 +107,14 @@ class Solutions:
             x_n = x_n1
             i += 1
         raise ValueError("Method failed after maximum iterations")
-    
+
+    @staticmethod
     def secant(
-        self, f: Callable[[float], float], x0: float, x1: float, error: float, max_iter: int
+        f: Callable[[float], float], 
+        x0: float, 
+        x1: float, 
+        error: float, 
+        max_iter: int
     ):
         """
         Secant method to find a root of the function f.
@@ -131,9 +143,14 @@ class Solutions:
             x0, x1 = x1, x2
             i += 1
         raise ValueError("Method failed after maximum iterations")
-    
+
+    @staticmethod
     def regula_falsi(
-        self, f: Callable[[float], float], a: float, b: float, error: float, max_iter: int
+        f: Callable[[float], float], 
+        a: float, 
+        b: float, 
+        error: float, 
+        max_iter: int
     ):
         """
         Regula Falsi method to find a root of the function f in the interval [a, b].
@@ -156,7 +173,9 @@ class Solutions:
         F_b = f(b)
         i = 0
         while i <= max_iter:
-            if (F_x := f(x := (a * F_b - b * F_a) / (F_b - F_a))) == 0 or abs(F_x) < error:
+            if (F_x := f(x := (a * F_b - b * F_a) / (F_b - F_a))) == 0 or abs(
+                F_x
+            ) < error:
                 return x, i
 
             if F_a * F_x > 0:
@@ -165,9 +184,15 @@ class Solutions:
                 b, F_b = x, F_x
             i += 1
         raise ValueError("Method failed after maximum iterations")
-    
+
+    @staticmethod
     def muller(
-        self, f: Callable[[float], float], x0: float, x1: float, x2: float, error: float, max_iter: int
+        f: Callable[[float], float],
+        x0: float,
+        x1: float,
+        x2: float,
+        error: float,
+        max_iter: int,
     ):
         """
         Muller method to find a root of the function f.
