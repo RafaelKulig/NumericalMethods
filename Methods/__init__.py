@@ -1,8 +1,8 @@
 from .Solutions import Solutions
-from .LinearSystem import LinearSystem
+from .Errors import Errors
 
 
 __all__ = [
     "Solutions",
-    "LinearSystem"
+    "Errors"
 ]
