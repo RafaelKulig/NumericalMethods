@@ -49,14 +49,3 @@ class LinearSystem:
             s=sum(self.coefficients[i][j] * solution[j] for j in range(i + 1, n)) # Calculate the sum of known variables
             solution[i] = (self.constants[i] - s) / self.coefficients[i][i] # Solve for the current variable
         return solution
-    
-test_linear_system = LinearSystem(
-    coefficients=[[2, 1, -1], [1, -1, 2], [1, 2, 3]],
-    constants=[8, 3, 7]
-)
-
-try:
-    solution = test_linear_system.gauss_elimination()
-    print("Solution:", solution)
-except ValueError as e:
-    print("Error:", e)
