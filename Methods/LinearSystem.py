@@ -1,3 +1,5 @@
+from typing import List
+
 class LinearSystem:
     """
     A class to solve a system of linear equations using Gaussian elimination.
@@ -49,3 +51,52 @@ class LinearSystem:
             s=sum(self.coefficients[i][j] * solution[j] for j in range(i + 1, n)) # Calculate the sum of known variables
             solution[i] = (self.constants[i] - s) / self.coefficients[i][i] # Solve for the current variable
         return solution
+    def gauss_jacobi(self, max_iterations=1000, tolerance=1e-10, initial_guess: List[float]=None): # type: ignore
+        """
+        Solves the system of linear equations using the Gauss-Jacobi iterative method.
+
+        Args:
+            max_iterations (int): Maximum number of iterations.
+            tolerance (float): Convergence tolerance.
+            initial_guess (list): Initial guess for the solution.
+
+        Returns:
+            list: Solution vector.
+
+        Raises:
+            ValueError: If input is invalid or method does not converge.
+        """
+        n = len(self.constants)
+
+        # Validate input dimensions
+        if len(self.coefficients) != n or any(len(row) != n for row in self.coefficients):
+            raise ValueError("Coefficient matrix must be square and match constants vector size.")
+
+        # Check for zero diagonal elements
+        for i in range(n):
+            if self.coefficients[i][i] == 0:
+                raise ValueError("Matrix is singular or nearly singular.")
+        if initial_guess:
+            if len(initial_guess) != n:
+                print("Warning: Initial guess size does not match number of variables. Using zero vector instead.")
+                solution = [0.0] * n
+            else:
+                solution = list(initial_guess)
+        else:
+            solution = [0.0] * n
+
+        for iteration in range(max_iterations):
+            new_solution = [0.0] * n
+            for i in range(n):
+                s = 0.0
+                for j in range(n):  
+                    if j!=i:
+                        s+=self.coefficients[i][j]*solution[j]  # Sum of known variables
+                new_solution[i] = (self.constants[i] - s) / self.coefficients[i][i] # Update the solution for the current variable
+
+            # Check for convergence
+            error = max(abs(new_solution[i] - solution[i]) for i in range(n))   
+            if error < tolerance:
+                return new_solution
+
+            solution = new_solution
