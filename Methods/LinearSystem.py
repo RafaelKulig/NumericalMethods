@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 class LinearSystem:
     """
@@ -66,6 +66,8 @@ class LinearSystem:
         Raises:
             ValueError: If input is invalid or method does not converge.
         """
+        if self.row_criteria()[0] is False:
+            print("Warning: The matrix does not satisfy the row criteria for convergence.")
         n = len(self.constants)
 
         # Validate input dimensions
@@ -100,3 +102,18 @@ class LinearSystem:
                 return new_solution
 
             solution = new_solution
+
+    def row_criteria(self) -> Tuple[bool, List[int]]:
+        """
+        Checks if the matrix satisfies the row criteria for convergence.
+        Returns:
+            Tuple[bool, List[int]]: A tuple where the first element is True if the matrix satisfies the criteria,
+                                    and the second element is a list of row indices that do not satisfy the criteria.
+        """
+        problematic_rows = []
+        n = len(self.coefficients)
+        for i in range(n):
+            row_sum = sum(abs(self.coefficients[i][j]) for j in range(n) if j != i)
+            if abs(self.coefficients[i][i]) <= row_sum:
+                problematic_rows.append(i)
+        return len(problematic_rows) == 0, problematic_rows # Return True if no problematic rows
