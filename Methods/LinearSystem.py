@@ -23,7 +23,7 @@ class LinearSystem:
             raise ValueError("Coefficients must be provided as a list of lists.")
         
 
-    def gauss_elimination(self):
+    def gauss_elimination(self) -> list:
         """ 
         Solves the system of linear equations using Gaussian elimination.
         Returns:
@@ -51,7 +51,7 @@ class LinearSystem:
             s=sum(self.coefficients[i][j] * solution[j] for j in range(i + 1, n)) # Calculate the sum of known variables
             solution[i] = (self.constants[i] - s) / self.coefficients[i][i] # Solve for the current variable
         return solution
-    def gauss_jacobi(self, max_iterations=1000, tolerance=1e-10, initial_guess: List[float]=None): # type: ignore
+    def gauss_jacobi(self, max_iterations=1000, tolerance=1e-10, initial_guess: List[float]=None) -> list: # type: ignore
         """
         Solves the system of linear equations using the Gauss-Jacobi iterative method.
 
@@ -66,9 +66,11 @@ class LinearSystem:
         Raises:
             ValueError: If input is invalid or method does not converge.
         """
-        if self.row_criteria()[0] is False:
+        criteria_ok, problematic_rows = self.row_criteria()
+        if not criteria_ok:
             print("Warning: The matrix does not satisfy the row criteria for convergence.")
-            print(f"Problematic rows: {self.row_criteria()[1]}")
+            print(f"Problematic rows: {problematic_rows}")
+
         n = len(self.constants)
 
         # Validate input dimensions
@@ -103,6 +105,7 @@ class LinearSystem:
                 return new_solution
 
             solution = new_solution
+        raise ValueError("Method did not converge within the maximum number of iterations.")
 
     def row_criteria(self) -> Tuple[bool, List[int]]:
         """
@@ -114,7 +117,58 @@ class LinearSystem:
         problematic_rows = []
         n = len(self.coefficients)
         for i in range(n):
-            row_sum = sum(abs(self.coefficients[i][j]) for j in range(n) if j != i)
-            if abs(self.coefficients[i][i]) <= row_sum:
+            row_sum = sum(abs(self.coefficients[i][j]) for j in range(n) if j != i) # Sum of non-diagonal elements
+            if abs(self.coefficients[i][i]) <= row_sum: 
                 problematic_rows.append(i)
         return len(problematic_rows) == 0, problematic_rows # Return True if no problematic rows
+
+    def gauss_seidel(self, max_iterations=1000, tolerance=1e-10, initial_guess: List[float]=None) -> list: # type: ignore
+        """
+        Solves the system of linear equations using the Gauss-Seidel iterative method.
+        Args:
+            max_iterations (int): Maximum number of iterations.
+            tolerance (float): Convergence tolerance.
+            initial_guess (list): Initial guess for the solution.
+        Returns:
+            list: Solution vector.
+        Raises:
+            ValueError: If input is invalid or method does not converge.
+        """
+        criteria_ok, problematic_rows = self.row_criteria()
+        if not criteria_ok:
+            print("Warning: The matrix does not satisfy the row criteria for convergence.")
+            print(f"Problematic rows: {problematic_rows}")
+
+        n = len(self.constants)
+
+        # Validate input dimensions
+        if len(self.coefficients) != n or any(len(row) != n for row in self.coefficients):
+            raise ValueError("Coefficient matrix must be square and match constants vector size.")
+
+        # Check for zero diagonal elements
+        for i in range(n):
+            if self.coefficients[i][i] == 0:
+                raise ValueError("Matrix is singular or nearly singular.")
+        if initial_guess:
+            if len(initial_guess) != n:
+                print("Warning: Initial guess size does not match number of variables. Using zero vector instead.")
+                solution = [0.0] * n
+            else:
+                solution = list(initial_guess)
+        else:
+            solution = [0.0] * n
+
+        for iteration in range(max_iterations):
+            new_solution = solution[:]
+            for i in range(n):
+                s = 0.0
+                for j in range(n):  
+                    if j!=i:
+                        s+=self.coefficients[i][j]*new_solution[j]  # Use the most recent values
+                new_solution[i] = (self.constants[i] - s) / self.coefficients[i][i] # Update the solution for the current variable
+            # Check for convergence
+            error = max(abs(new_solution[i] - solution[i]) for i in range(n))   
+            if error < tolerance:
+                return new_solution
+            solution = new_solution
+        raise ValueError("Method did not converge within the maximum number of iterations.")
