@@ -68,6 +68,7 @@ class LinearSystem:
         """
         if self.row_criteria()[0] is False:
             print("Warning: The matrix does not satisfy the row criteria for convergence.")
+            print(f"Problematic rows: {self.row_criteria()[1]}")
         n = len(self.constants)
 
         # Validate input dimensions
